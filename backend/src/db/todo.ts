@@ -13,6 +13,9 @@ export async function createTodo(userId: number, {title, description}: TodoParam
             description,
             userId: userId,
             done: false
+        },
+        select : {
+            id: true
         }
     })
 
@@ -35,8 +38,7 @@ export async function markDoneTodo(todoId : number) {
 export async function getTodo(userId: number) {
     const res = await prisma.todo.findMany({
         where:{
-            userId: userId,
-            done: false
+            userId: userId
         }
     });
 

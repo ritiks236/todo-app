@@ -2,9 +2,9 @@ import express, {  Router } from "express";
 import userRouter from "./user";
 import todoRouter from "./todo";
 
-const router :Router = express.Router();
+const rootRouter :Router = express.Router();
 
-router.use('/user', userRouter);
-router.use('/todo', todoRouter);
+rootRouter.use('/user', userRouter);
+rootRouter.use('/todo', todoRouter);
 
-export default router;
+export default rootRouter;

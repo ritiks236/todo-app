@@ -1,6 +1,6 @@
 import express, {Application, Request, Response} from "express";
 const app: Application = express();
-const rootRouter = require('./routes/index')
+import rootRouter from "./routes";
 
 app.use(express.json());
 
