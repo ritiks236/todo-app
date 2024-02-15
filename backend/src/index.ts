@@ -1,10 +1,12 @@
 import express, {Application, Request, Response} from "express";
 const app: Application = express();
+const rootRouter = require('./routes/index')
 
 app.use(express.json());
 
 const PORT = 3000;
 
+app.use('/api/v1', rootRouter);
 
 app.get('/', (req :Request, res :Response) => {
     res.send('Welcome to express and Typescript server');
