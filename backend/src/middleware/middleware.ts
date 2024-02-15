@@ -3,10 +3,13 @@ import { JWT_SECRET } from "../config";
 import jwt from "jsonwebtoken";
 
 interface CustomRequest extends Request {
-    userId? :string
+    userId ?:string
 }
 
-export const authMiddleware = (req :CustomRequest, res :Response, next :NextFunction) => {
+type AuthMiddlewareFunction = (req: CustomRequest, res: Response, next: NextFunction) => void;
+
+
+export const authMiddleware :AuthMiddlewareFunction = (req, res, next) => {
     const authHeader = req.headers.authorization;
     
     if(!authHeader || !authHeader.startsWith('Bearer ')){
