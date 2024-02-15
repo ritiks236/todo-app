@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-const router: Router = express.Router();
+const todoRouter: Router = express.Router();
 import zod from 'zod';
 
 const todoBody = zod.object({
@@ -7,4 +7,4 @@ const todoBody = zod.object({
     description: zod.string()
 })
 
-module.exports = router;
+export default todoRouter;

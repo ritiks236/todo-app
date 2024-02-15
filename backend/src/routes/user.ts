@@ -1,8 +1,10 @@
 import express, { Router, Request, Response} from "express";
-const router: Router = express.Router();
+const userRouter: Router = express.Router();
 import zod from "zod";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 import { createUser, findUser } from "../db/user";
+import { JWT_SECRET } from "../config";
 
 const signUpBody = zod.object({
     username: zod.string().email(),
@@ -16,7 +18,7 @@ const signInBody = zod.object({
     password: zod.string()
 })
 
-router.post('/signup', async(req :Request, res :Response) => {
+userRouter.post('/signup', async(req :Request, res :Response) => {
     const {success} = signUpBody.safeParse(req.body);
 
     if(!success){
@@ -39,11 +41,16 @@ router.post('/signup', async(req :Request, res :Response) => {
 
     const user = await createUser({username, password}, {firstName, lastName});
 
-    console.log(user.id);
-    return res.status(200).json('Signed Up Successfully');
+    const userId = user.id;
+    const token = jwt.sign({userId}, JWT_SECRET)
+    
+    return res.status(200).json({
+        message : 'Signed Up Successfully',
+        token : token
+    });
 });
 
-router.post('/signin', async(req :Request, res :Response) => {
+userRouter.post('/signin', async(req :Request, res :Response) => {
     const {success} = signInBody.safeParse(req.body);
 
     if(!success){
@@ -62,6 +69,8 @@ router.post('/signin', async(req :Request, res :Response) => {
         })
     }
 
+    const userId = existingUser.id;
+
     bcrypt.compare(password, existingUser.password, (err, data) => {
         if(err){
             return res.status(411).json({
@@ -70,8 +79,10 @@ router.post('/signin', async(req :Request, res :Response) => {
             })
         }
         if(data){
+            const token = jwt.sign({userId}, JWT_SECRET);
             return res.status(200).json({
-                message : "Logged In successfully"
+                message : "Logged In successfully",
+                token : token
             })
         }
         else{   
@@ -82,4 +93,4 @@ router.post('/signin', async(req :Request, res :Response) => {
     })
 });
 
-module.exports = router;
+export default userRouter;
