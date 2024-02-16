@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 interface UserParams{
     username: string,
-    password: string
+    hashedpassword: string
 }
 
 interface NameParams{
@@ -11,14 +11,14 @@ interface NameParams{
     lastName: string
 }
 
-export async function createUser({username, password}: UserParams,
+export async function createUser({username, hashedpassword}: UserParams,
                                  {firstName, lastName}: NameParams) {
     const res = await prisma.user.create({
         data : {
             username,
             firstName,
             lastName,
-            password
+            password : hashedpassword
         }, 
         select:{
             id: true

@@ -23,7 +23,7 @@ userRouter.post('/signup', async(req :Request, res :Response) => {
 
     if(!success){
         return res.status(404).json({
-            message : "Incorrect Outputs"
+            message : "Incorrect Inputs"
         })
     }
     
@@ -37,9 +37,9 @@ userRouter.post('/signup', async(req :Request, res :Response) => {
         })
     }
 
-    const hashedPassword :string = await bcrypt.hash(password, 10);
+    const hashedpassword = await bcrypt.hash(password, 10);
 
-    const user = await createUser({username, password}, {firstName, lastName});
+    const user = await createUser({username, hashedpassword}, {firstName, lastName});
 
     const userId = user.id;
     const token = jwt.sign({userId}, JWT_SECRET)
