@@ -2,7 +2,7 @@ import express, { Router, Request, Response } from "express";
 const todoRouter: Router = express.Router();
 import zod, { number } from 'zod';
 import { authMiddleware } from "../middleware/middleware";
-import { createTodo, getTodo, markDoneTodo } from "../db/todo";
+import { createTodo, deleteTodo, getTodo, markDoneTodo } from "../db/todo";
 
 const todoBody = zod.object({
     title: zod.string(),
@@ -60,6 +60,18 @@ todoRouter.get('/todos', authMiddleware , async(req :CustomRequest, res :Respons
     }
 
     return res.status(411).json("Can't get all the todos, Pls try again!");
+});
+
+todoRouter.delete('/delete', authMiddleware , async(req :CustomRequest, res :Response) => {
+    const todoId :string = req.query.id as string;
+
+    const result = await deleteTodo(Number(todoId));
+
+    if(result){
+        return res.status(200).json("Todo Deleted");
+    }
+
+    return res.status(411).json("Error in Deleting, Pls try again!");
 });
 
 export default todoRouter;
