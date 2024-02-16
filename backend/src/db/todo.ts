@@ -44,3 +44,13 @@ export async function getTodo(userId: number) {
 
     return res;
 }
+
+export async function deleteTodo(todoId:number) {
+    const res = await prisma.todo.delete({
+        where: {
+            id : todoId
+        }
+    });
+
+    return res;
+}
